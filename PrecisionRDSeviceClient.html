@@ -1,0 +1,515 @@
+<html>
+<head>
+<title> RD Service Client
+</title>
+
+<style type="text/css">
+	body {
+            font-family: 'Segoe UI';
+            background-color: #FFFFFF;
+            margin: 0px 5px 5px 5px;
+            padding: 0px 5px 5px 5px;
+            color: #555;
+            font-size: 12px;
+        }
+
+        .panel {
+            background-color: #FFFFFF;
+            -moz-user-select: none;
+            background-image: none;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            margin: 12px 12px;
+            padding: 6px 12px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 0px;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            cursor: pointer;
+            -moz-user-select: none;
+            background-image: none;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+        .btn-50 {
+            width: 50px;
+        }
+        .btn-100 {
+            width: 100px;
+        }
+
+        .btn-150 {
+            width: 150px;
+        }
+
+        .btn-200 {
+            width: 205px;
+        }
+
+        .btn-primary {
+            color: #FFF;
+            background-color: #428BCA;
+            border-color: #357EBD;
+        }
+
+            .btn-primary:hover {
+                color: #FFF;
+                background-color: #357EBD;
+                border-color: #428BCA;
+            }
+
+        .form-control {
+            display: block;
+            width: 100%;
+            height: 24px;
+            padding: 3px 6px;
+            font-size: 12px;
+            /*line-height: 1.42857;*/
+            color: #555;
+            background-color: #FFF;
+            background-image: none;
+            border: 1px solid #bdbdbd;
+            border-radius: 4px;
+            box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
+            transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+        }
+
+        textarea.form-control {
+            height: auto;
+        }
+
+        .text-bold {
+            font-weight: bold;
+        }
+
+        .img {
+            min-width: 125px;
+            min-height: 155px;
+            width: 125px;
+            height: 155px;
+            border: 1px solid #CCC;
+            border-radius: 4px;
+            box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
+            background-color: #FFFFFF;
+        }
+		
+
+		
+    </style>
+	<script src="jquery-1.12.4.js"></script>
+ 
+</head>
+<body>
+		<div>
+		<table">
+			<tr>
+				<td width="100%">
+					<table style=border:1;>
+					<tr>
+						<td width="20px">
+							FCount:
+						</td>
+						<td>
+							<input type="text" value="1" id="txtfcount" class="form-control" />
+						</td>
+						<td width="20px">
+							FType:
+						</td>
+						<td>
+							<input type="text" value="0" id="txtftype" class="form-control" />
+						</td>
+						<td width="20px">
+							Format:
+						</td>
+						<td>
+							<input type="text" value="0" id="txtformat" class="form-control" />
+						</td>
+						<td width="20px">
+							PidVer:
+						</td>
+						<td>
+							<input type="text" value="2.0" id="txtPidVer" class="form-control" />
+						</td>
+						<td width="20px">
+							Timeout:
+						</td>
+						<td>
+							<input type="text" value="10000" id="txttimeout" class="form-control" />
+						</td>
+						<td width="20px">
+							env:
+						</td>
+						<td>
+							<input type="text" value="P" id="txtenv" class="form-control" />
+						</td>
+						<td width="20px">
+							Locking Key:
+						</td>
+						<td>
+							<input type="text" value="" id="txtlk" class="form-control" />
+						</td>
+					</tr>					
+					</table>
+				</td>
+				<td width="100%">
+					<table style=border:1;>
+						<tr>
+							<td width="20%">Finger Position</td>
+							<td><input type="text" value="UNKNOWN" id="txtposh" class="form-control" /></td>
+						</tr>	
+					</table>
+				</td>
+				<label>Pid Options</label>
+				<textarea id="txtPidOptions" style="width: 100%; height:30px;" class="form-control"> </textarea>				
+			</tr>
+		</table>
+		
+		<table style=border:1;>
+		<td width="20%">
+			<tr>
+				<td>Available RDService</td>
+				<td colspan="6px"><select id="ddlRDS" class="form-control" style="width:100%;"><option></option></select></td>
+			</tr>	
+			</td>
+		</table>
+		<table style=border:1;>
+		<tr>
+			<label id="lblStatus"></label>
+		</tr>
+		</table>
+		<table style="border:1;width:20%">
+			<tr>
+				<td><input class="btn btn-primary btn-200" onclick="this.disabled=true; this.value='Please Wait...'; discoverRDService(); this.value='Discover RDService'; this.disabled=false;" type="button" value="Discover RDService"></td>
+				<td><input class="btn btn-primary btn-200" onclick="this.disabled=true; this.value='Please Wait...'; deviceInfo(); this.value='Device Info'; this.disabled=false;" type="button" value="Device Info"></td>
+				<td><input type="button" class="btn btn-primary btn-200" onclick="this.disabled=true; this.value='Please Wait...'; Capture(); this.value='Capture'; this.disabled=false;" value="Capture"/></td>
+				<td><input type="button" class="btn btn-primary btn-200" onclick="this.disabled=true; this.value='Please Wait...'; reset(); this.value='Reset'; this.disabled=false;" value="Reset"/></td>
+			</tr>
+		</table>
+		
+		<label>RDService Info</label>
+		<textarea id="txtRDSInfo" style="width: 100%; height:30px;" class="form-control"> </textarea>
+		<label>Device Info</label>
+		<textarea id="txtDeviceInfo" style="width: 100%; height:150px;" class="form-control"> </textarea>
+		
+		<label>Pid Data</label>
+		<textarea id="txtPidData" style="width: 100%; height:200px;" class="form-control"> </textarea>
+		
+		
+		 
+		
+	<script language="javascript" type="text/javascript">
+	
+		var finalUrl="";
+		var MethodInfo="";
+		var MethodCapture="";
+		var finalport="";
+		
+		function reset()
+		{
+			$('#txtfcount').val('1');
+			$('#txtftype').val('0');
+			$('#txtformat').val('0');
+			$('#txtPidVer').val('2.0');
+			$('#txttimeout').val('10000');
+			$('#txtenv').val('P');
+			$('#txtlk').val('');
+			$('#txtposh').val('UNKNOWN');
+			$('#txtRDSInfo').val('');
+			$('#txtDeviceInfo').val('');
+			$('#txtPidOptions').val('');
+			$('#txtPidData').val('');
+		    $("select#ddlRDS").prop('selectedIndex', 0);
+		    
+			
+		}
+		
+		
+		
+		$( "#ddlRDS" ).change(function() {
+		
+		
+		discoverAvdmFirstNode($("#ddlRDS").val());
+	    });
+			
+		
+		
+		function discoverFirstNode(PortNo)				// Get the Status of the RDService found by discoverRDService()
+		{
+			$('#txtDeviceInfo').val('');
+			$('#txtPidOptions').val('');
+			$('#txtPidData').val('');
+			
+		//alert(PortNo);
+		
+			var primaryUrl = "http://127.0.0.1:";
+            url = "";
+			var verb = "RDSERVICE";
+            var err = "";
+			var res;
+			$.support.cors = true;
+			var httpStaus = false;
+			var jsonstr="";
+			var data = new Object();
+			var obj = new Object();
+				
+			$.ajax({
+				type: "RDSERVICE",
+				async: false,
+				crossDomain: true,
+				url: primaryUrl + PortNo,
+				contentType: "text/xml; charset=utf-8",
+				processData: false,
+				cache: false,
+				async:false,
+				crossDomain:true,
+				success: function (data) {
+					var xmlstr = data.xml ? data.xml : (new XMLSerializer()).serializeToString(data);
+					//alert(xmlstr);
+					data = xmlstr;
+					//alert(data);
+					httpStaus = true;
+					res = { httpStaus: httpStaus, data: data };
+				    //alert(data);		
+					$('#txtRDSInfo').val(data);
+							 
+					var $doc = $.parseXML(data);
+							
+					for(var j=0;j<2;j++)
+					{
+						if($($doc).find('Interface').eq(j).attr('id') == 'CAPTURE')
+						{
+							MethodCapture=$($doc).find('Interface').eq(j).attr('path');
+						}else if($($doc).find('Interface').eq(j).attr('id') == 'DEVICEINFO')
+						{
+							MethodInfo=$($doc).find('Interface').eq(j).attr('path');
+						}
+					}
+					
+					alert("Precision RDSERVICE Discover Successfully");
+				},
+				error: function(msg) {
+                        var result = msg.status + msg.statusText + msg.responseText;
+                        alert( result);
+                        
+                    }
+			});
+				
+			return res;	
+							
+		}
+		
+		
+		
+		
+		function discoverRDService()				// Search for the valid RDService from port 11100 to 11120
+		{
+            var primaryUrl = "http://127.0.0.1:";
+			var tempcount = 0;
+            url = "";
+			$("#ddlRDS").empty();
+			alert("Discovering Precision RDService.\nPlease wait for some time.");
+			
+            for (var i = 11100; i <= 11120; i++)
+			{
+				<!-- $("#lblStatus").text("Discovering RD service on port : "); -->
+                <!-- $("#lblStatus").text("Discovering RD service on port : " + i.toString()); -->
+               
+				var verb = "RDSERVICE";
+                var err = "";
+			
+			//alert(i);
+				var res;
+				$.support.cors = true;
+				var httpStaus = false;
+				var jsonstr="";
+				var data = new Object();
+				var obj = new Object();
+				var xmlstr;
+						
+				$.ajax({
+      				type: "RDSERVICE",
+					async: false,
+					crossDomain: true,
+					url: primaryUrl + i.toString(),
+					contentType: "text/xml; charset=utf-8",
+					processData: false,
+					cache: false,
+					async:false,
+					crossDomain:true,
+					
+					success: function (data) {
+					try{
+						xmlstr = data.xml ? data.xml : (new XMLSerializer()).serializeToString(data);
+						//alert(xmlstr);
+						data = xmlstr;
+							
+						httpStaus = true;
+						res = { httpStaus: httpStaus, data: data };
+					    //alert(data);		
+						finalUrl = primaryUrl + i.toString();
+						
+						var $doc = $.parseXML(xmlstr);
+						var CmbData1 =  $($doc).find('RDService').attr('status');
+						var CmbData2 =  $($doc).find('RDService').attr('info');
+							
+						$("#ddlRDS").append('<option value='+i.toString()+'>Port : '+i.toString()+' Status : ' + CmbData1 +'('+CmbData2+')</option>')
+						tempcount++;
+						}
+						catch(e){}
+					},
+					error: function(msg) {
+                        var result = msg.status + msg.statusText + msg.responseText;
+                       // alert( result);
+                        
+                    }
+				});
+				
+				if(xmlstr != null)
+				{
+					if(xmlstr.indexOf('Precision') > 0)
+					{
+					//alert(xmlstr);
+						
+						$("select#ddlRDS").prop('selectedIndex', tempcount-1);
+						finalport=i.toString();
+						discoverFirstNode(i);
+						break;
+					}
+				}
+						
+			}
+			
+					
+				   
+			
+			return res;	
+							
+		}
+		
+		
+		function deviceInfo()						// Get Device Info from the path given by RDService Info
+		{
+			url = "";
+			finalUrl="http://127.0.0.1:"+finalport;
+			var verb = "DEVICEINFO";
+            //alert(finalUrl);
+                        
+            var err = "";
+			var res;
+			$.support.cors = true;
+			var httpStaus = false;
+			var jsonstr="";
+			$.ajax({
+    			type: "DEVICEINFO",
+				async: false,
+				crossDomain: true,
+				url: finalUrl+MethodInfo,
+				contentType: "text/xml; charset=utf-8",
+				processData: false,
+				success: function (data) {
+					var xmlstr = data.xml ? data.xml : (new XMLSerializer()).serializeToString(data);
+					//alert(xmlstr);
+					data = xmlstr;
+					//alert(url);
+					httpStaus = true;
+					res = { httpStaus: httpStaus, data: data };
+								
+					$('#txtDeviceInfo').val(data);
+				},
+				error: function(msg) {
+                        var result = msg.status + msg.statusText + msg.responseText;
+                        alert( result);
+                        
+                    }
+			});
+			return res;
+								
+                
+		}
+		
+		
+		
+		function Capture()						// Get Capture Info from the path given by RDService Info
+		{
+			var fCount = document.getElementById('txtfcount').value;
+			var fType = document.getElementById('txtftype').value;
+			var format = document.getElementById('txtformat').value;
+			var pidver = document.getElementById('txtPidVer').value;
+			var timeout = document.getElementById('txttimeout').value;
+			var env = document.getElementById('txtenv').value;
+			var lock = document.getElementById('txtlk').value;
+			var posh = document.getElementById('txtposh').value;
+			
+			finalUrl="http://127.0.0.1:"+finalport;
+	   
+		// Form input Pid OPtions for capture Input
+			var XML='<?xml version="1.0"?> <PidOptions ver="1.0"> <Opts fCount="'+ fCount +'" fType="'+ fType +'" format="'+ format +'" pidVer="'+ pidver +'" timeout="'+ timeout +'" env="'+ env +'" posh="'+ posh +'" /> <CustOpts> <Param name="LockingKey" value="'+lock +'" /> </CustOpts> </PidOptions>';
+			var verb = "CAPTURE";
+            var err = "";
+			var res;
+			$.support.cors = true;
+			var httpStaus = false;
+			var jsonstr="";
+			$.ajax({
+      			type: "CAPTURE",
+				async: false,
+				crossDomain: true,
+				url: finalUrl+MethodCapture,
+				data:XML,
+				contentType: "text/xml; charset=utf-8",
+				processData: false,
+				success: function (data) {
+					var xmlstr = data.xml ? data.xml : (new XMLSerializer()).serializeToString(data);
+					//alert(xmlstr);
+					data = xmlstr;
+					//alert(data);
+					httpStaus = true;
+					res = { httpStaus: httpStaus, data: data };
+							
+					$('#txtPidData').val(data);
+					$('#txtPidOptions').val(XML);
+								
+					var $doc = $.parseXML(data);
+					var Message =  $($doc).find('Resp').attr('errInfo');
+				},
+				error: function(msg) {
+                        var result = msg.status + msg.statusText + msg.responseText;
+                        alert( result);
+                        
+                    }
+			});
+						
+			return res;
+			    
+		}
+		function getHttpError(jqXHR) {
+		    var err = "Unhandled Exception";
+		    if (jqXHR.status === 0) {
+		        err = 'Service Unavailable';
+		    } else if (jqXHR.status == 404) {
+		        err = 'Requested page not found';
+		    } else if (jqXHR.status == 500) {
+		        err = 'Internal Server Error';
+		    } else if (thrownError === 'parsererror') {
+		        err = 'Requested JSON parse failed';
+		    } else if (thrownError === 'timeout') {
+		        err = 'Time out error';
+		    } else if (thrownError === 'abort') {
+		        err = 'Ajax request aborted';
+		    } else {
+		        err = 'Unhandled Error';
+		    }
+		    return err;
+		}
+	</script>
+		</body>
+		
+</html>
